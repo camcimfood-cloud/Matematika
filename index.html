@@ -23,10 +23,6 @@
     <!-- MathJax for Mathematical Formula Rendering -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <!-- Firebase Compat SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
     <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
@@ -373,28 +369,176 @@
         </div>
     </footer>
 
-    <!-- Script Logic Aplikasi -->
+    <!-- Script Pendaftaran Service Worker -->
     <script>
-        // Konfigurasi Firebase Terbaru Sesuai Permintaan Anda
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log('Service Worker berhasil didaftarkan:', reg.scope))
+                    .catch((err) => console.log('Pendaftaran Service Worker gagal:', err));
+            });
+        }
+    </script>
+
+    <!-- Firebase SDK v11 (Modular ESM via Script Tag) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-analytics.js";
+
+        // Konfigurasi Firebase Proyek Anda (matematika-70d8e)
         const firebaseConfig = {
-          apiKey: "AIzaSyAIAe5mQ-t7aLgjv5IrqzYVWVmoVjDXmKg",
-          authDomain: "matematika-87992.firebaseapp.com",
-          databaseURL: "https://matematika-87992-default-rtdb.asia-southeast1.firebasedatabase.app",
-          projectId: "matematika-87992",
-          storageBucket: "matematika-87992.firebasestorage.app",
-          messagingSenderId: "409375117209",
-          appId: "1:409375117209:web:3c1e31b58d60f27e934d08",
-          measurementId: "G-8K6HQE9S0K"
+          apiKey: "AIzaSyD1O03ywEBd5gWqCLRTCCIhja8CZVHYJ08",
+          authDomain: "matematika-70d8e.firebaseapp.com",
+          databaseURL: "https://matematika-70d8e-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "matematika-70d8e",
+          storageBucket: "matematika-70d8e.firebasestorage.app",
+          messagingSenderId: "793792747997",
+          appId: "1:793792747997:web:e69acd8b6a0f226b453e34",
+          measurementId: "G-56574CCNNC"
         };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.database();
-        if (firebase.analytics) {
-            firebase.analytics();
+        // Inisialisasi Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const analytics = getAnalytics(app);
+
+        // Global functions yang dipanggil dari elemen HTML
+        window.startQuiz = function() {
+            const nameInput = document.getElementById('player-name').value.trim();
+            window.playerName = nameInput ? nameInput : "Pemain Anonim";
+            
+            window.quizData = generate10DynamicQuizzes();
+            window.qIdx = 0; window.score = 0; window.answered = false;
+            
+            document.getElementById('quiz-player-tag').innerText = `Pemain: ${window.playerName}`;
+            document.getElementById('quiz-start-screen').classList.add('hidden');
+            document.getElementById('quiz-result-screen').classList.add('hidden');
+            document.getElementById('quiz-question-screen').classList.remove('hidden');
+            document.getElementById('quiz-badge-container').classList.remove('hidden');
+            document.getElementById('quiz-nav-container').classList.remove('hidden');
+            loadQ();
+        };
+
+        window.ansQ = function(selected) {
+            if (window.answered) return;
+            window.answered = true;
+            const q = window.quizData[window.qIdx];
+            const expDiv = document.getElementById('quiz-exp');
+            expDiv.classList.remove('hidden');
+            if (selected === q.ans) {
+                window.score += 10;
+                document.getElementById(`q-opt-${selected}`).className = "w-full text-left p-4 rounded-2xl border border-emerald-500 bg-emerald-500/10 text-emerald-300 text-sm font-bold transition";
+                expDiv.className = "p-4 rounded-2xl text-xs border bg-emerald-950/30 border-emerald-500/20 text-emerald-300";
+                expDiv.innerHTML = `<strong>Benar!</strong> ${q.exp}`;
+            } else {
+                document.getElementById(`q-opt-${selected}`).className = "w-full text-left p-4 rounded-2xl border border-red-500 bg-red-500/10 text-red-300 text-sm font-bold transition";
+                document.getElementById(`q-opt-${q.ans}`).className = "w-full text-left p-4 rounded-2xl border border-emerald-500 bg-emerald-500/10 text-emerald-300 text-sm font-bold transition";
+                expDiv.className = "p-4 rounded-2xl text-xs border bg-red-950/30 border-red-500/20 text-red-300";
+                expDiv.innerHTML = `<strong>Kurang tepat.</strong> Jawaban benar: <strong>${String.fromCharCode(65 + q.ans)}. ${q.opts[q.ans]}</strong><br>${q.exp}`;
+            }
+            document.getElementById('quiz-score-badge').innerText = `Skor: ${window.score}`;
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        };
+
+        window.nextQuiz = function() {
+            window.qIdx++;
+            if (window.qIdx < window.quizData.length) loadQ();
+            else {
+                document.getElementById('quiz-question-screen').classList.add('hidden');
+                document.getElementById('quiz-nav-container').classList.add('hidden');
+                document.getElementById('quiz-badge-container').classList.add('hidden');
+                document.getElementById('quiz-result-screen').classList.remove('hidden');
+                document.getElementById('quiz-final-score').innerText = `${window.playerName}, Total Skor Anda: ${window.score} / 100`;
+                
+                let localScores = JSON.parse(localStorage.getItem('math_calc_leaderboard') || '[]');
+                const newEntry = {
+                    name: window.playerName,
+                    score: window.score,
+                    time: Date.now()
+                };
+
+                localScores.push(newEntry);
+                localStorage.setItem('math_calc_leaderboard', JSON.stringify(localScores));
+                renderCombinedLeaderboard();
+
+                push(ref(db, 'leaderboard'), newEntry)
+                    .then(() => {
+                        document.getElementById('save-feedback').innerText = "Skor tersimpan ke server global secara real-time!";
+                    })
+                    .catch(err => {
+                        console.error("Firebase write error:", err);
+                        document.getElementById('save-feedback').innerText = "Skor ditampilkan di papan peringkat lokal.";
+                    });
+            }
+        };
+
+        function loadQ() {
+            window.answered = false;
+            const q = window.quizData[window.qIdx];
+            document.getElementById('quiz-prog').innerText = `Soal ${window.qIdx + 1} dari ${window.quizData.length}`;
+            document.getElementById('quiz-score-badge').innerText = `Skor: ${window.score}`;
+            document.getElementById('quiz-q-text').innerText = q.q;
+            document.getElementById('quiz-exp').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+            document.getElementById('quiz-opts').innerHTML = q.opts.map((opt, i) => `<button onclick="ansQ(${i})" id="q-opt-${i}" class="w-full text-left p-4 rounded-2xl border border-slate-700 hover:bg-slate-700/50 text-sm font-bold text-white transition">${String.fromCharCode(65 + i)}. ${opt}</button>`).join('');
         }
 
+        let firebaseScores = [];
+        window.renderCombinedLeaderboard = function() {
+            const list = document.getElementById('leaderboard-list');
+            let localScores = JSON.parse(localStorage.getItem('math_calc_leaderboard') || '[]');
+            let combined = [...firebaseScores];
+            localScores.forEach(loc => {
+                const exists = combined.some(fb => fb.name === loc.name && fb.score === loc.score && Math.abs((fb.time || 0) - (loc.time || 0)) < 15000);
+                if (!exists) combined.push(loc);
+            });
+
+            if (combined.length === 0) {
+                list.innerHTML = '<p class="text-slate-500 text-center py-20 text-xs font-sans">Belum ada skor tercatat. Jadilah yang pertama di papan peringkat!</p>';
+                return;
+            }
+
+            combined.sort((a, b) => b.score - a.score);
+            list.innerHTML = combined.slice(0, 20).map((item, index) => {
+                let rankIcon = index === 0 ? '<i class="fa-solid fa-crown text-amber-400"></i>' : index === 1 ? '<i class="fa-solid fa-medal text-slate-300"></i>' : index === 2 ? '<i class="fa-solid fa-award text-amber-600"></i>' : `#${index + 1}`;
+                let cardBg = index === 0 ? 'bg-amber-500/10 border-amber-500/30 text-white' : index === 1 ? 'bg-slate-700/40 border-slate-600/40 text-slate-200' : index === 2 ? 'bg-amber-900/20 border-amber-800/30 text-slate-200' : 'bg-slate-900/60 border-slate-800 text-slate-300';
+                return `
+                    <div class="p-3.5 rounded-2xl flex justify-between items-center text-xs border ${cardBg} shadow-sm transition-all">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-6 text-center font-extrabold">${rankIcon}</span>
+                            <span class="font-bold truncate max-w-[140px] sm:max-w-[180px]">${item.name}</span>
+                        </div>
+                        <span class="font-extrabold text-blue-400">${item.score} Poin</span>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        // Real-time listener dari Firebase Database baru
+        const dbRef = query(ref(db, 'leaderboard'), orderByChild('score'), limitToLast(20));
+        onValue(dbRef, (snapshot) => {
+            const data = snapshot.val();
+            firebaseScores = data ? Object.values(data) : [];
+            window.renderCombinedLeaderboard();
+            const statusEl = document.getElementById('realtime-status');
+            if(statusEl) {
+                statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block"></span><span>LIVE SYNC</span>`;
+                statusEl.className = "text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold flex items-center space-x-1.5";
+            }
+        }, (error) => {
+            const statusEl = document.getElementById('realtime-status');
+            if(statusEl) {
+                statusEl.innerHTML = `<span>LOKAL AKTIF</span>`;
+                statusEl.className = "text-[10px] px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold";
+            }
+        });
+
+        window.renderCombinedLeaderboard();
+    </script>
+
+    <!-- Script Logika Umum (Materi, Kalkulator, Kuadrat, Turunan, Geometri) -->
+    <script>
         const detailedMaterials = {
             1: {
                 level: 'sd', classNum: 1, title: 'Kelas 1 SD: Bilangan, Penjumlahan & Pengurangan Dasar',
@@ -757,9 +901,6 @@
             resBox.innerHTML = `<p class="text-white">Volume Total: <strong class="text-blue-400">${vol.toFixed(2)}</strong></p><p class="text-white">Luas Permukaan: <strong class="text-indigo-400">${lp.toFixed(2)}</strong></p>`;
         }
 
-        // =====================================================================
-        // PENGACAK POSISI JAWABAN (FISHER-YATES SHUFFLE) AGAR TIDAK SELALU A
-        // =====================================================================
         function createShuffledQuestion(qText, correctText, wrongArr, explanation) {
             let options = [
                 { text: correctText, isCorrect: true },
@@ -782,7 +923,6 @@
 
         function generate10DynamicQuizzes() {
             let questions = [];
-            
             let a1 = Math.floor(Math.random() * 5) + 2;
             let n1 = Math.floor(Math.random() * 3) + 2;
             let ansA1 = a1 * n1;
@@ -871,130 +1011,6 @@
 
             return questions;
         }
-
-        let quizData = [];
-        let qIdx = 0, score = 0, answered = false, playerName = "Anonim";
-        let localScores = JSON.parse(localStorage.getItem('math_calc_leaderboard') || '[]');
-        let firebaseScores = [];
-
-        function renderCombinedLeaderboard() {
-            const list = document.getElementById('leaderboard-list');
-            let combined = [...firebaseScores];
-            localScores.forEach(loc => {
-                const exists = combined.some(fb => fb.name === loc.name && fb.score === loc.score && Math.abs((fb.time || 0) - (loc.time || 0)) < 15000);
-                if (!exists) combined.push(loc);
-            });
-
-            if (combined.length === 0) {
-                list.innerHTML = '<p class="text-slate-500 text-center py-20 text-xs font-sans">Belum ada skor tercatat. Jadilah yang pertama di papan peringkat!</p>';
-                return;
-            }
-
-            combined.sort((a, b) => b.score - a.score);
-            list.innerHTML = combined.slice(0, 20).map((item, index) => {
-                let rankIcon = index === 0 ? '<i class="fa-solid fa-crown text-amber-400"></i>' : index === 1 ? '<i class="fa-solid fa-medal text-slate-300"></i>' : index === 2 ? '<i class="fa-solid fa-award text-amber-600"></i>' : `#${index + 1}`;
-                let cardBg = index === 0 ? 'bg-amber-500/10 border-amber-500/30 text-white' : index === 1 ? 'bg-slate-700/40 border-slate-600/40 text-slate-200' : index === 2 ? 'bg-amber-900/20 border-amber-800/30 text-slate-200' : 'bg-slate-900/60 border-slate-800 text-slate-300';
-                return `
-                    <div class="p-3.5 rounded-2xl flex justify-between items-center text-xs border ${cardBg} shadow-sm transition-all">
-                        <div class="flex items-center space-x-3">
-                            <span class="w-6 text-center font-extrabold">${rankIcon}</span>
-                            <span class="font-bold truncate max-w-[140px] sm:max-w-[180px]">${item.name}</span>
-                        </div>
-                        <span class="font-extrabold text-blue-400">${item.score} Poin</span>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        function startQuiz() {
-            const nameInput = document.getElementById('player-name').value.trim();
-            playerName = nameInput ? nameInput : "Pemain Anonim";
-            
-            quizData = generate10DynamicQuizzes();
-            qIdx = 0; score = 0; answered = false;
-            
-            document.getElementById('quiz-player-tag').innerText = `Pemain: ${playerName}`;
-            document.getElementById('quiz-start-screen').classList.add('hidden');
-            document.getElementById('quiz-result-screen').classList.add('hidden');
-            document.getElementById('quiz-question-screen').classList.remove('hidden');
-            document.getElementById('quiz-badge-container').classList.remove('hidden');
-            document.getElementById('quiz-nav-container').classList.remove('hidden');
-            loadQ();
-        }
-
-        function loadQ() {
-            answered = false;
-            const q = quizData[qIdx];
-            document.getElementById('quiz-prog').innerText = `Soal ${qIdx + 1} dari ${quizData.length}`;
-            document.getElementById('quiz-score-badge').innerText = `Skor: ${score}`;
-            document.getElementById('quiz-q-text').innerText = q.q;
-            document.getElementById('quiz-exp').classList.add('hidden');
-            document.getElementById('quiz-next-btn').classList.add('hidden');
-            document.getElementById('quiz-opts').innerHTML = q.opts.map((opt, i) => `<button onclick="ansQ(${i})" id="q-opt-${i}" class="w-full text-left p-4 rounded-2xl border border-slate-700 hover:bg-slate-700/50 text-sm font-bold text-white transition">${String.fromCharCode(65 + i)}. ${opt}</button>`).join('');
-        }
-
-        function ansQ(selected) {
-            if (answered) return;
-            answered = true;
-            const q = quizData[qIdx], expDiv = document.getElementById('quiz-exp');
-            expDiv.classList.remove('hidden');
-            if (selected === q.ans) {
-                score += 10;
-                document.getElementById(`q-opt-${selected}`).className = "w-full text-left p-4 rounded-2xl border border-emerald-500 bg-emerald-500/10 text-emerald-300 text-sm font-bold transition";
-                expDiv.className = "p-4 rounded-2xl text-xs border bg-emerald-950/30 border-emerald-500/20 text-emerald-300";
-                expDiv.innerHTML = `<strong>Benar!</strong> ${q.exp}`;
-            } else {
-                document.getElementById(`q-opt-${selected}`).className = "w-full text-left p-4 rounded-2xl border border-red-500 bg-red-500/10 text-red-300 text-sm font-bold transition";
-                document.getElementById(`q-opt-${q.ans}`).className = "w-full text-left p-4 rounded-2xl border border-emerald-500 bg-emerald-500/10 text-emerald-300 text-sm font-bold transition";
-                expDiv.className = "p-4 rounded-2xl text-xs border bg-red-950/30 border-red-500/20 text-red-300";
-                expDiv.innerHTML = `<strong>Kurang tepat.</strong> Jawaban benar: <strong>${String.fromCharCode(65 + q.ans)}. ${q.opts[q.ans]}</strong><br>${q.exp}`;
-            }
-            document.getElementById('quiz-score-badge').innerText = `Skor: ${score}`;
-            document.getElementById('quiz-next-btn').classList.remove('hidden');
-        }
-
-        function nextQuiz() {
-            qIdx++;
-            if (qIdx < quizData.length) loadQ();
-            else {
-                document.getElementById('quiz-question-screen').classList.add('hidden');
-                document.getElementById('quiz-nav-container').classList.add('hidden');
-                document.getElementById('quiz-badge-container').classList.add('hidden');
-                document.getElementById('quiz-result-screen').classList.remove('hidden');
-                document.getElementById('quiz-final-score').innerText = `${playerName}, Total Skor Anda: ${score} / 100`;
-                
-                const newEntry = {
-                    name: playerName,
-                    score: score,
-                    time: Date.now()
-                };
-
-                localScores.push(newEntry);
-                localStorage.setItem('math_calc_leaderboard', JSON.stringify(localScores));
-                renderCombinedLeaderboard();
-
-                db.ref('leaderboard').push(newEntry)
-                    .then(() => {
-                        document.getElementById('save-feedback').innerText = "Skor tersimpan ke server global secara real-time!";
-                    })
-                    .catch(err => {
-                        console.error("Firebase write error:", err);
-                        document.getElementById('save-feedback').innerText = "Skor ditampilkan di papan peringkat lokal.";
-                    });
-            }
-        }
-
-        renderCombinedLeaderboard();
-        db.ref('leaderboard').orderByChild('score').limitToLast(20).on('value', (snapshot) => {
-            const data = snapshot.val();
-            firebaseScores = data ? Object.values(data) : [];
-            renderCombinedLeaderboard();
-            document.getElementById('realtime-status').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block"></span><span>LIVE SYNC</span>`;
-            document.getElementById('realtime-status').className = "text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold flex items-center space-x-1.5";
-        }, (error) => {
-            document.getElementById('realtime-status').innerHTML = `<span>LOKAL AKTIF</span>`;
-            document.getElementById('realtime-status').className = "text-[10px] px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold";
-        });
     </script>
 </body>
 </html>
