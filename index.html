@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="light">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,7 @@
     </script>
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- MathJax for Mathematical Formula Rendering -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -22,209 +22,214 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
-    <style>body { font-family: 'Inter', sans-serif; }</style>
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
 
-    <!-- Header -->
-    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-blue-600 text-white p-2.5 rounded-xl shadow-md">
-                    <i class="fa-solid fa-graduation-cap text-xl"></i>
+    <!-- Top Navigation Bar -->
+    <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700/60 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                    <i class="fa-solid fa-square-root-variable text-white text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Math Calculator</h1>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Pusat Materi Lengkap SD-SMA & Kalkulator Pintar</p>
+                    <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">Math Calculator</h1>
+                    <p class="text-xs text-slate-400 font-medium">Platform Edukasi & Evaluasi Matematika Modern</p>
                 </div>
             </div>
-            <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
-                <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
+            <button onclick="switchTab('quiz')" class="px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center space-x-2 hover:bg-amber-500/20 transition">
+                <i class="fa-solid fa-trophy"></i><span>Papan Skor</span>
             </button>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Main Content Shell -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         
-        <!-- Navigation Tabs -->
-        <div class="flex overflow-x-auto space-x-2 pb-4 mb-6 scrollbar-thin">
-            <button onclick="switchTab('material')" id="btn-material" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 whitespace-nowrap bg-blue-600 text-white shadow-md transition">
-                <i class="fa-solid fa-book-open"></i><span>Materi SD - SMA (Kelas 1-12)</span>
+        <!-- Navigation Tabs Bar -->
+        <div class="grid grid-cols-2 sm:flex sm:overflow-x-auto gap-2 pb-2">
+            <button onclick="switchTab('material')" id="btn-material" class="tab-btn px-5 py-3 rounded-2xl font-bold text-sm flex items-center justify-center space-x-2.5 bg-blue-600 text-white shadow-lg shadow-blue-600/20 transition">
+                <i class="fa-solid fa-book-atlas"></i><span>Materi SD-SMA</span>
             </button>
-            <button onclick="switchTab('calc')" id="btn-calc" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 whitespace-nowrap bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 transition">
-                <i class="fa-solid fa-calculator"></i><span>Kalkulator Ilmiah</span>
+            <button onclick="switchTab('calc')" id="btn-calc" class="tab-btn px-5 py-3 rounded-2xl font-bold text-sm flex items-center justify-center space-x-2.5 bg-slate-800 text-slate-400 hover:bg-slate-700/60 hover:text-white transition">
+                <i class="fa-solid fa-calculator"></i><span>Kalkulator</span>
             </button>
-            <button onclick="switchTab('quad')" id="btn-quad" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 whitespace-nowrap bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 transition">
-                <i class="fa-solid fa-square-root-variable"></i><span>Persamaan Kuadrat (Minus)</span>
+            <button onclick="switchTab('quad')" id="btn-quad" class="tab-btn px-5 py-3 rounded-2xl font-bold text-sm flex items-center justify-center space-x-2.5 bg-slate-800 text-slate-400 hover:bg-slate-700/60 hover:text-white transition">
+                <i class="fa-solid fa-superscript"></i><span>Kuadrat</span>
             </button>
-            <button onclick="switchTab('calculus')" id="btn-calculus" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 whitespace-nowrap bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 transition">
-                <i class="fa-solid fa-chart-line"></i><span>Turunan Fungsi</span>
+            <button onclick="switchTab('calculus')" id="btn-calculus" class="tab-btn px-5 py-3 rounded-2xl font-bold text-sm flex items-center justify-center space-x-2.5 bg-slate-800 text-slate-400 hover:bg-slate-700/60 hover:text-white transition">
+                <i class="fa-solid fa-wave-square"></i><span>Turunan</span>
             </button>
-            <button onclick="switchTab('geometry')" id="btn-geometry" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 whitespace-nowrap bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 transition">
-                <i class="fa-solid fa-shapes"></i><span>Bangun Ruang 3D</span>
+            <button onclick="switchTab('geometry')" id="btn-geometry" class="tab-btn px-5 py-3 rounded-2xl font-bold text-sm flex items-center justify-center space-x-2.5 bg-slate-800 text-slate-400 hover:bg-slate-700/60 hover:text-white transition">
+                <i class="fa-solid fa-cube"></i><span>Bangun Ruang</span>
             </button>
-            <button onclick="switchTab('quiz')" id="btn-quiz" class="tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 whitespace-nowrap bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 transition">
-                <i class="fa-solid fa-trophy text-yellow-500"></i><span>Kuis & Papan Skor Global</span>
+            <button onclick="switchTab('quiz')" id="btn-quiz" class="tab-btn px-5 py-3 rounded-2xl font-bold text-sm flex items-center justify-center space-x-2.5 bg-slate-800 text-slate-400 hover:bg-slate-700/60 hover:text-white transition">
+                <i class="fa-solid fa-award text-amber-400"></i><span>Kuis & Papan Peringkat</span>
             </button>
         </div>
 
         <!-- ================= TAB 0: MATERI PEMBELAJARAN ================= -->
         <div id="tab-content-material" class="tab-content space-y-6">
-            <div id="material-list-view" class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <h2 class="text-lg font-bold mb-2 flex items-center space-x-2 text-blue-600">
-                    <i class="fa-solid fa-book-bookmark"></i><span>Pusat Buku Materi Matematika (Kelas 1 SD - 12 SMA)</span>
-                </h2>
-                <p class="text-xs text-gray-500 mb-6">Pilih salah satu kelas di bawah ini untuk membuka halaman materi lengkap beserta pembahasan dan contoh soal mendalam.</p>
+            <div id="material-list-view" class="bg-slate-800/60 border border-slate-700/60 p-6 sm:p-8 rounded-3xl backdrop-blur-sm">
+                <div class="max-w-xl mb-8">
+                    <span class="text-xs font-bold uppercase tracking-widest px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20">Kurikulum Lengkap</span>
+                    <h2 class="text-2xl font-extrabold text-white mt-3">Pusat Buku Materi Matematika</h2>
+                    <p class="text-sm text-slate-400 mt-1">Eksplorasi ringkasan konsep, rumus utama, serta contoh soal terstruktur dari jenjang SD hingga SMA.</p>
+                </div>
                 
-                <div class="flex flex-wrap gap-2 mb-6">
-                    <button onclick="filterLevel('all')" id="lvl-all" class="level-btn px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white transition">Semua Kelas</button>
-                    <button onclick="filterLevel('sd')" id="lvl-sd" class="level-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 transition">SD (1 - 6)</button>
-                    <button onclick="filterLevel('smp')" id="lvl-smp" class="level-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 transition">SMP (7 - 9)</button>
-                    <button onclick="filterLevel('sma')" id="lvl-sma" class="level-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 transition">SMA (10 - 12)</button>
+                <div class="flex flex-wrap gap-2.5 mb-8">
+                    <button onclick="filterLevel('all')" id="lvl-all" class="level-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-md transition">Semua Kelas</button>
+                    <button onclick="filterLevel('sd')" id="lvl-sd" class="level-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-700/60 text-slate-300 hover:bg-slate-700 transition">SD (Kelas 1-6)</button>
+                    <button onclick="filterLevel('smp')" id="lvl-smp" class="level-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-700/60 text-slate-300 hover:bg-slate-700 transition">SMP (Kelas 7-9)</button>
+                    <button onclick="filterLevel('sma')" id="lvl-sma" class="level-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-700/60 text-slate-300 hover:bg-slate-700 transition">SMA (Kelas 10-12)</button>
                 </div>
 
-                <div id="material-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                <div id="material-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
             </div>
 
             <!-- Detail Halaman Materi Per Kelas -->
-            <div id="material-detail-view" class="hidden bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 space-y-6">
-                <button onclick="backToMaterialList()" class="inline-flex items-center space-x-2 text-sm font-semibold text-blue-600 hover:underline mb-2">
+            <div id="material-detail-view" class="hidden bg-slate-800/60 border border-slate-700/60 p-6 sm:p-10 rounded-3xl backdrop-blur-sm space-y-8">
+                <button onclick="backToMaterialList()" class="inline-flex items-center space-x-2 text-sm font-bold text-blue-400 hover:text-blue-300 transition">
                     <i class="fa-solid fa-arrow-left"></i><span>Kembali ke Daftar Kelas</span>
                 </button>
-                <div id="detail-content-area" class="space-y-6"></div>
+                <div id="detail-content-area" class="space-y-8"></div>
             </div>
         </div>
 
         <!-- ================= TAB 1: KALKULATOR ILMIAH ================= -->
         <div id="tab-content-calc" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <h2 class="text-base font-bold mb-4 flex items-center space-x-2 text-blue-600">
-                    <i class="fa-solid fa-calculator"></i><span>Kalkulator Ilmiah</span>
+            <div class="lg:col-span-2 bg-slate-800/60 border border-slate-700/60 p-6 sm:p-8 rounded-3xl backdrop-blur-sm">
+                <h2 class="text-lg font-bold text-white mb-6 flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center"><i class="fa-solid fa-calculator"></i></div>
+                    <span>Kalkulator Ilmiah Pintar</span>
                 </h2>
-                <div class="mb-4">
-                    <div id="calc-history-screen" class="text-right text-xs text-gray-400 h-6 font-mono"></div>
-                    <input type="text" id="calc-display" readonly value="0" class="w-full text-right text-3xl font-bold bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 font-mono">
+                <div class="mb-5">
+                    <div id="calc-history-screen" class="text-right text-xs text-slate-400 h-6 font-mono"></div>
+                    <input type="text" id="calc-display" readonly value="0" class="w-full text-right text-3xl font-extrabold bg-slate-900 border border-slate-700 rounded-2xl px-5 py-4 font-mono text-white shadow-inner">
                 </div>
-                <div class="grid grid-cols-5 gap-2">
-                    <button onclick="calcClear()" class="p-3 bg-red-100 text-red-600 rounded-xl font-bold">AC</button>
-                    <button onclick="calcBack()" class="p-3 bg-gray-100 dark:bg-gray-700 rounded-xl font-bold"><i class="fa-solid fa-delete-left"></i></button>
-                    <button onclick="calcAppend('%')" class="p-3 bg-gray-100 dark:bg-gray-700 rounded-xl font-bold">%</button>
-                    <button onclick="calcAppend('/')" class="p-3 bg-blue-50 text-blue-600 rounded-xl font-bold">÷</button>
-                    <button onclick="calcFunc('sqrt')" class="p-3 bg-indigo-50 text-indigo-600 rounded-xl font-bold">√x</button>
+                <div class="grid grid-cols-5 gap-2.5">
+                    <button onclick="calcClear()" class="p-4 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl font-extrabold hover:bg-red-500/20 transition">AC</button>
+                    <button onclick="calcBack()" class="p-4 bg-slate-700/50 text-slate-300 rounded-xl font-extrabold hover:bg-slate-700 transition"><i class="fa-solid fa-delete-left"></i></button>
+                    <button onclick="calcAppend('%')" class="p-4 bg-slate-700/50 text-slate-300 rounded-xl font-extrabold hover:bg-slate-700 transition">%</button>
+                    <button onclick="calcAppend('/')" class="p-4 bg-blue-600/20 text-blue-400 border border-blue-500/20 rounded-xl font-extrabold">÷</button>
+                    <button onclick="calcFunc('sqrt')" class="p-4 bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 rounded-xl font-extrabold">√x</button>
 
-                    <button onclick="calcAppend('7')" class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl font-bold">7</button>
-                    <button onclick="calcAppend('8')" class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl font-bold">8</button>
-                    <button onclick="calcAppend('9')" class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl font-bold">9</button>
-                    <button onclick="calcAppend('*')" class="p-3 bg-blue-50 text-blue-600 rounded-xl font-bold">×</button>
-                    <button onclick="calcFunc('sq')" class="p-3 bg-indigo-50 text-indigo-600 rounded-xl font-bold">x²</button>
+                    <button onclick="calcAppend('7')" class="p-4 bg-slate-700/30 text-white rounded-xl font-extrabold hover:bg-slate-700/60 transition">7</button>
+                    <button onclick="calcAppend('8')" class="p-4 bg-slate-700/30 text-white rounded-xl font-extrabold hover:bg-slate-700/60 transition">8</button>
+                    <button onclick="calcAppend('9')" class="p-4 bg-slate-700/30 text-white rounded-xl font-extrabold hover:bg-slate-700/60 transition">9</button>
+                    <button onclick="calcAppend('*')" class="p-4 bg-blue-600/20 text-blue-400 border border-blue-500/20 rounded-xl font-extrabold">×</button>
+                    <button onclick="calcFunc('sq')" class="p-4 bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 rounded-xl font-extrabold">x²</button>
 
-                    <button onclick="calcAppend('4')" class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl font-bold">4</button>
-                    <button onclick="calcAppend('5')" class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl font-bold">5</button>
-                    <button onclick="calcAppend('6')" class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl font-bold">6</button>
-                    <button onclick="calcAppend('-')" class="p-3 bg-blue-50 text-blue-600 rounded-xl font-bold">-</button>
-                    <button onclick="calcFunc('sin')" class="p-3 bg-indigo-50 text-indigo-600 rounded-xl font-bold">sin</button>
+                    <button onclick="calcAppend('4')" class="p-4 bg-slate-700/30 text-white rounded-xl font-extrabold hover:bg-slate-700/60 transition">4</button>
+                    <button onclick="calcAppend('5')" class="p-4 bg-slate-700/30 text-white rounded-xl font-extrabold hover:bg-slate-700/60 transition">5</button>
+                    <button onclick="calcAppend('6')" class="p-4 bg-slate-700/30 text-white rounded-xl font-extrabold hover:bg-slate-700/60 transition">6</button>
+                    <button onclick="calcAppend('-')" class="p-4 bg-blue-600/20 text-blue-400 border border-blue-500/20 rounded-xl font-extrabold">-</button>
+                    <button onclick="calcFunc('sin')" class="p-4 bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 rounded-xl font-extrabold">sin</button>
 
-                    <button onclick="calcAppend('1')" class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl font-bold">1</button>
-                    <button onclick="calcAppend('2')" class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl font-bold">2</button>
-                    <button onclick="calcAppend('3')" class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl font-bold">3</button>
-                    <button onclick="calcAppend('+')" class="p-3 bg-blue-50 text-blue-600 rounded-xl font-bold">+</button>
-                    <button onclick="calcFunc('cos')" class="p-3 bg-indigo-50 text-indigo-600 rounded-xl font-bold">cos</button>
+                    <button onclick="calcAppend('1')" class="p-4 bg-slate-700/30 text-white rounded-xl font-extrabold hover:bg-slate-700/60 transition">1</button>
+                    <button onclick="calcAppend('2')" class="p-4 bg-slate-700/30 text-white rounded-xl font-extrabold hover:bg-slate-700/60 transition">2</button>
+                    <button onclick="calcAppend('3')" class="p-4 bg-slate-700/30 text-white rounded-xl font-extrabold hover:bg-slate-700/60 transition">3</button>
+                    <button onclick="calcAppend('+')" class="p-4 bg-blue-600/20 text-blue-400 border border-blue-500/20 rounded-xl font-extrabold">+</button>
+                    <button onclick="calcFunc('cos')" class="p-4 bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 rounded-xl font-extrabold">cos</button>
 
-                    <button onclick="calcAppend('0')" class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl font-bold col-span-2">0</button>
-                    <button onclick="calcAppend('.')" class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl font-bold">.</button>
-                    <button onclick="calcCompute()" class="p-3 bg-blue-600 text-white rounded-xl font-bold">=</button>
-                    <button onclick="calcFunc('tan')" class="p-3 bg-indigo-50 text-indigo-600 rounded-xl font-bold">tan</button>
+                    <button onclick="calcAppend('0')" class="p-4 bg-slate-700/30 text-white rounded-xl font-extrabold col-span-2 hover:bg-slate-700/60 transition">0</button>
+                    <button onclick="calcAppend('.')" class="p-4 bg-slate-700/30 text-white rounded-xl font-extrabold hover:bg-slate-700/60 transition">.</button>
+                    <button onclick="calcCompute()" class="p-4 bg-blue-600 text-white rounded-xl font-extrabold hover:bg-blue-500 shadow-lg shadow-blue-600/30 transition">=</button>
+                    <button onclick="calcFunc('tan')" class="p-4 bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 rounded-xl font-extrabold">tan</button>
                 </div>
             </div>
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col h-[420px]">
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="font-bold text-sm text-blue-600"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat</h3>
-                    <button onclick="clearHistory()" class="text-xs text-red-500 hover:underline">Hapus</button>
+            <div class="bg-slate-800/60 border border-slate-700/60 p-6 sm:p-8 rounded-3xl backdrop-blur-sm flex flex-col h-[460px]">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-sm text-blue-400 flex items-center space-x-2"><i class="fa-solid fa-clock-rotate-left"></i><span>Riwayat Kalkulasi</span></h3>
+                    <button onclick="clearHistory()" class="text-xs text-red-400 hover:underline">Hapus Semua</button>
                 </div>
-                <div id="calc-history-list" class="flex-grow overflow-y-auto space-y-2 text-sm pr-1">
-                    <p class="text-gray-400 text-center py-10 text-xs">Belum ada riwayat</p>
+                <div id="calc-history-list" class="flex-grow overflow-y-auto space-y-2.5 text-sm pr-1">
+                    <p class="text-slate-500 text-center py-20 text-xs">Belum ada riwayat operasi tercatat</p>
                 </div>
             </div>
         </div>
 
         <!-- ================= TAB 2: PERSAMAAN KUADRAT ================= -->
         <div id="tab-content-quad" class="tab-content hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <h2 class="text-base font-bold mb-3 flex items-center space-x-2 text-blue-600">
-                    <i class="fa-solid fa-square-root-variable"></i><span>Kalkulator Kuadrat (Dukungan Minus)</span>
+            <div class="bg-slate-800/60 border border-slate-700/60 p-6 sm:p-8 rounded-3xl backdrop-blur-sm space-y-5">
+                <h2 class="text-lg font-bold text-white flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center"><i class="fa-solid fa-superscript"></i></div>
+                    <span>Kalkulator Persamaan Kuadrat</span>
                 </h2>
-                <p class="text-xs text-gray-500 mb-4">Masukkan nilai \(a, b, c\) (boleh menggunakan nilai negatif/minus).</p>
-                <div class="grid grid-cols-3 gap-3 mb-4">
+                <p class="text-xs text-slate-400">Masukkan parameter \(a, b, c\) dari bentuk umum \(ax^2 + bx + c = 0\) (Mendukung input angka negatif).</p>
+                <div class="grid grid-cols-3 gap-3">
                     <div>
-                        <label class="text-xs text-gray-500">Nilai a</label>
-                        <input type="number" id="q-a" value="-1" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 mt-1 font-mono">
+                        <label class="text-xs text-slate-400 font-bold">Koefisien a</label>
+                        <input type="number" id="q-a" value="-1" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 mt-1.5 font-mono text-white text-center font-bold">
                     </div>
                     <div>
-                        <label class="text-xs text-gray-500">Nilai b</label>
-                        <input type="number" id="q-b" value="5" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 mt-1 font-mono">
+                        <label class="text-xs text-slate-400 font-bold">Koefisien b</label>
+                        <input type="number" id="q-b" value="5" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 mt-1.5 font-mono text-white text-center font-bold">
                     </div>
                     <div>
-                        <label class="text-xs text-gray-500">Nilai c</label>
-                        <input type="number" id="q-c" value="-6" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 mt-1 font-mono">
+                        <label class="text-xs text-slate-400 font-bold">Konstanta c</label>
+                        <input type="number" id="q-c" value="-6" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 mt-1.5 font-mono text-white text-center font-bold">
                     </div>
                 </div>
-                <button onclick="hitungKuadrat()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-xl transition">Hitung Akar & Diskriminan</button>
-                <div id="res-quad" class="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl text-sm hidden space-y-2"></div>
+                <button onclick="hitungKuadrat()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-600/20 transition">Hitung Diskriminan & Akar</button>
+                <div id="res-quad" class="p-5 bg-slate-900 rounded-2xl text-sm border border-slate-700 hidden space-y-2"></div>
             </div>
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <h3 class="font-bold text-base mb-3 text-indigo-600"><i class="fa-solid fa-lightbulb"></i> Tips Jika Ada Tanda Minus (-)</h3>
-                <ul class="text-xs space-y-3 text-gray-600 dark:text-gray-300 leading-relaxed">
-                    <li>• <strong>Koefisien \(a\) Negatif:</strong> Kalikan seluruh persamaan dengan \(-1\) agar koefisien \(x^2\) positif, sehingga lebih mudah dihitung.</li>
-                    <li>• <strong>Diskriminan Negatif (\(D < 0\)):</strong> Jika \(b^2 - 4ac\) bernilai negatif, persamaan tidak memiliki akar real.</li>
+            <div class="bg-slate-800/60 border border-slate-700/60 p-6 sm:p-8 rounded-3xl backdrop-blur-sm space-y-4">
+                <h3 class="font-bold text-base text-indigo-400 flex items-center space-x-2"><i class="fa-solid fa-circle-info"></i><span>Panduan Analisis Kuadrat</span></h3>
+                <ul class="text-xs space-y-3 text-slate-300 leading-relaxed">
+                    <li class="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">• <strong>Koefisien \(a\) Negatif:</strong> Dianjurkan dikalikan \(-1\) untuk mempermudah pemfaktoran awal.</li>
+                    <li class="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">• <strong>Diskriminan (\(D = b^2 - 4ac\)):</strong> Menentukan jenis akar persamaan kuadrat (real kembar, berlainan, atau imajiner).</li>
                 </ul>
             </div>
         </div>
 
         <!-- ================= TAB 3: TURUNAN FUNGSI ================= -->
         <div id="tab-content-calculus" class="tab-content hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <h2 class="text-base font-bold mb-3 flex items-center space-x-2 text-indigo-600">
-                    <i class="fa-solid fa-chart-line"></i><span>Kalkulator Turunan Polinomial</span>
+            <div class="bg-slate-800/60 border border-slate-700/60 p-6 sm:p-8 rounded-3xl backdrop-blur-sm space-y-5">
+                <h2 class="text-lg font-bold text-white flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center"><i class="fa-solid fa-wave-square"></i></div>
+                    <span>Kalkulator Turunan Polinomial</span>
                 </h2>
-                <div class="space-y-3 mb-4">
+                <div class="space-y-4">
                     <div>
-                        <label class="text-xs text-gray-500">Suku 1 (a & n)</label>
-                        <div class="grid grid-cols-2 gap-2 mt-1">
-                            <input type="number" id="t-a1" value="3" class="bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm font-mono">
-                            <input type="number" id="t-n1" value="4" class="bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm font-mono">
+                        <label class="text-xs text-slate-400 font-bold">Suku Pertama (Koefisien a & Pangkat n)</label>
+                        <div class="grid grid-cols-2 gap-3 mt-1.5">
+                            <input type="number" id="t-a1" value="3" placeholder="Koefisien a" class="bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm font-mono text-white">
+                            <input type="number" id="t-n1" value="4" placeholder="Pangkat n" class="bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm font-mono text-white">
                         </div>
                     </div>
                     <div>
-                        <label class="text-xs text-gray-500">Suku 2 (a & n)</label>
-                        <div class="grid grid-cols-2 gap-2 mt-1">
-                            <input type="number" id="t-a2" value="-5" class="bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm font-mono">
-                            <input type="number" id="t-n2" value="2" class="bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm font-mono">
+                        <label class="text-xs text-slate-400 font-bold">Suku Kedua (Koefisien a & Pangkat n)</label>
+                        <div class="grid grid-cols-2 gap-3 mt-1.5">
+                            <input type="number" id="t-a2" value="-5" placeholder="Koefisien a" class="bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm font-mono text-white">
+                            <input type="number" id="t-n2" value="2" placeholder="Pangkat n" class="bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm font-mono text-white">
                         </div>
                     </div>
                 </div>
-                <button onclick="hitungTurunan()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-xl transition">Hitung Turunan f'(x)</button>
-                <div id="res-turunan" class="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl text-sm hidden space-y-2"></div>
+                <button onclick="hitungTurunan()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-600/20 transition">Kalkulasi Turunan f'(x)</button>
+                <div id="res-turunan" class="p-5 bg-slate-900 rounded-2xl text-sm border border-slate-700 hidden space-y-2"></div>
             </div>
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <h3 class="font-bold text-base mb-3 text-blue-600"><i class="fa-solid fa-book"></i> Rumus Turunan Dasar</h3>
-                <div class="text-xs space-y-3 text-gray-600 dark:text-gray-300">
-                    <div class="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl"><strong>Aturan Pangkat:</strong> \(\frac{d}{dx}[ax^n] = a \cdot n \cdot x^{n-1}\)</div>
-                    <div class="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl"><strong>Konstanta:</strong> Turunan angka tetap adalah \(0\).</div>
+            <div class="bg-slate-800/60 border border-slate-700/60 p-6 sm:p-8 rounded-3xl backdrop-blur-sm space-y-4">
+                <h3 class="font-bold text-base text-blue-400 flex items-center space-x-2"><i class="fa-solid fa-book-bookmark"></i><span>Prinsip Turunan Dasar</span></h3>
+                <div class="text-xs space-y-3 text-slate-300">
+                    <div class="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50"><strong>Aturan Pangkat:</strong> \(\frac{d}{dx}[ax^n] = a \cdot n \cdot x^{n-1}\)</div>
+                    <div class="p-3 bg-slate-900/50 rounded-xl border border-slate-700/50"><strong>Aturan Penjumlahan:</strong> Turunan dari jumlah fungsi adalah jumlah turunan masing-masing suku.</div>
                 </div>
             </div>
         </div>
 
         <!-- ================= TAB 4: BANGUN RUANG 3D ================= -->
         <div id="tab-content-geometry" class="tab-content hidden space-y-6">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <h2 class="text-lg font-bold mb-4 flex items-center space-x-2 text-blue-600">
-                    <i class="fa-solid fa-shapes"></i><span>Kalkulator Bangun Ruang 3D</span>
+            <div class="bg-slate-800/60 border border-slate-700/60 p-6 sm:p-8 rounded-3xl backdrop-blur-sm space-y-6">
+                <h2 class="text-lg font-bold text-white flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center"><i class="fa-solid fa-cube"></i></div>
+                    <span>Kalkulator Volume & Luas Permukaan 3D</span>
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <label class="block text-xs font-medium text-gray-500 mb-1">Pilih Bangun</label>
-                        <select id="space-shape" onchange="updateSpaceForm()" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-sm">
+                        <label class="block text-xs font-bold text-slate-400 mb-2">Pilih Jenis Bangun Ruang</label>
+                        <select id="space-shape" onchange="updateSpaceForm()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white font-bold">
                             <option value="kubus">Kubus</option>
                             <option value="balok">Balok</option>
                             <option value="tabung">Tabung</option>
@@ -233,90 +238,120 @@
                     </div>
                     <div id="space-inputs" class="md:col-span-2 grid grid-cols-2 gap-3"></div>
                 </div>
-                <button onclick="hitungBangunRuang()" class="mt-4 w-full bg-blue-600 text-white font-medium py-2.5 rounded-xl hover:bg-blue-700 transition">Hitung Volume & Luas Permukaan</button>
-                <div id="space-result" class="mt-6 p-5 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 hidden"></div>
+                <button onclick="hitungBangunRuang()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-600/20 transition">Kalkulasi Geometri Ruang</button>
+                <div id="space-result" class="p-5 bg-slate-900 rounded-2xl border border-slate-700 hidden space-y-2"></div>
             </div>
         </div>
 
-        <!-- ================= TAB 5: KUIS & REAL-TIME LEADERBOARD ================= -->
-        <div id="tab-content-quiz" class="tab-content hidden max-w-4xl mx-auto">
-            <div class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 pb-4 border-b border-gray-100 dark:border-gray-700 gap-4">
-                    <div>
-                        <h2 class="text-lg font-bold flex items-center space-x-2 text-yellow-500">
-                            <i class="fa-solid fa-trophy"></i><span>Kuis Dinamis & Papan Skor Global</span>
-                        </h2>
-                        <p class="text-xs text-gray-500 mt-0.5">Soal terus diperbarui secara otomatis dan skor tersimpan secara real-time.</p>
+        <!-- ================= TAB 5: KUIS 10 SOAL & DEDICATED LEADERBOARD ================= -->
+        <div id="tab-content-quiz" class="tab-content hidden grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Sisi Kiri: Panel Kuis (7 Kolom) -->
+            <div class="lg:col-span-7 bg-slate-800/60 border border-slate-700/60 p-6 sm:p-8 rounded-3xl backdrop-blur-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center pb-4 mb-6 border-b border-slate-700/60">
+                        <div>
+                            <h2 class="text-lg font-bold text-amber-400 flex items-center space-x-2.5">
+                                <i class="fa-solid fa-trophy"></i><span>Tantangan 10 Soal Matematika</span>
+                            </h2>
+                            <p class="text-xs text-slate-400 mt-0.5">Kunci jawaban diacak otomatis (A, B, C, atau D) di setiap soal!</p>
+                        </div>
+                        <div id="quiz-badge-container" class="hidden">
+                            <span id="quiz-score-badge" class="px-3.5 py-1.5 bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold text-xs rounded-xl">Skor: 0</span>
+                        </div>
                     </div>
-                    <div class="w-full sm:w-auto flex items-center space-x-2">
-                        <input type="text" id="player-name" placeholder="Nama Anda" class="bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm w-full sm:w-40 font-medium">
-                        <button onclick="startQuiz()" class="bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-sm hover:bg-blue-700 transition whitespace-nowrap">Mulai Kuis</button>
+
+                    <!-- Layar Masuk / Mulai -->
+                    <div id="quiz-start-screen" class="text-center py-10 space-y-6">
+                        <div class="w-20 h-20 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-3xl flex items-center justify-center mx-auto text-3xl shadow-xl shadow-amber-500/5">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <div class="max-w-md mx-auto space-y-2">
+                            <h3 class="text-lg font-bold text-white">Siap Menguji Penguasaan Matematika Anda?</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">Masukkan nama identitas Anda di bawah ini untuk mulai mengerjakan 10 soal acak dan masuk ke papan peringkat global.</p>
+                        </div>
+                        <div class="max-w-xs mx-auto space-y-3">
+                            <input type="text" id="player-name" placeholder="Ketik Nama Anda..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-center text-sm font-bold text-white placeholder-slate-500">
+                            <button onclick="startQuiz()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-600/30 transition">Mulai 10 Soal Kuis</button>
+                        </div>
+                    </div>
+
+                    <!-- Layar Pertanyaan -->
+                    <div id="quiz-question-screen" class="hidden space-y-6">
+                        <div class="flex justify-between items-center text-xs font-bold text-slate-400">
+                            <span id="quiz-prog" class="px-3 py-1 bg-slate-900 rounded-lg border border-slate-700">Soal 1 dari 10</span>
+                            <span class="text-blue-400 font-mono" id="quiz-player-tag">Pemain: Anonim</span>
+                        </div>
+                        <div id="quiz-q-text" class="text-base font-bold text-white min-h-[60px] leading-relaxed p-4 bg-slate-900/50 rounded-2xl border border-slate-700/50"></div>
+                        <div id="quiz-opts" class="space-y-3"></div>
+                        <div id="quiz-exp" class="hidden p-4 rounded-2xl text-xs border"></div>
+                    </div>
+
+                    <!-- Layar Hasil Akhir Sesi Kuis -->
+                    <div id="quiz-result-screen" class="hidden text-center py-12 space-y-6">
+                        <div class="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-3xl flex items-center justify-center mx-auto text-3xl">
+                            <i class="fa-solid fa-medal"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-xl font-extrabold text-white">Kuis Telah Selesai!</h3>
+                            <p id="quiz-final-score" class="text-lg font-bold text-blue-400 font-mono"></p>
+                            <p id="save-feedback" class="text-xs text-emerald-400 font-medium">Skor Anda berhasil diperbarui ke papan peringkat!</p>
+                        </div>
+                        <button onclick="startQuiz()" class="px-8 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-600/20 transition">Mainkan Sesi Baru</button>
                     </div>
                 </div>
 
-                <div id="quiz-start-screen" class="text-center py-8">
-                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl">
-                        <i class="fa-solid fa-brain"></i>
-                    </div>
-                    <h3 class="text-base font-bold mb-2">Uji Kemampuan Matematika (Soal Tak Terbatas)</h3>
-                    <p class="text-sm text-gray-500 max-w-md mx-auto mb-6">Masukkan nama Anda lalu tekan Mulai Kuis. Soal akan di-generate secara acak setiap sesi baru!</p>
-                </div>
-
-                <div id="quiz-question-screen" class="hidden space-y-6">
-                    <div class="flex justify-between items-center text-xs font-semibold text-gray-400">
-                        <span id="quiz-prog">Soal 1 dari 5</span>
-                        <span id="quiz-score-badge" class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">Skor: 0</span>
-                    </div>
-                    <div id="quiz-q-text" class="text-base font-semibold min-h-[50px]"></div>
-                    <div id="quiz-opts" class="space-y-3"></div>
-                    <div id="quiz-exp" class="hidden p-4 rounded-xl text-sm border"></div>
-                    <div class="flex justify-end pt-4">
-                        <button id="quiz-next-btn" onclick="nextQuiz()" class="hidden bg-blue-600 text-white font-medium px-6 py-2.5 rounded-xl transition">Lanjut</button>
-                    </div>
-                </div>
-
-                <div id="quiz-result-screen" class="hidden space-y-6 text-center py-6">
-                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-3xl flex items-center justify-center mx-auto text-2xl">
-                        <i class="fa-solid fa-award"></i>
-                    </div>
-                    <h3 class="text-xl font-bold">Kuis Selesai!</h3>
-                    <p id="quiz-final-score" class="text-lg font-semibold text-blue-600"></p>
-                    <button onclick="startQuiz()" class="bg-blue-600 text-white font-semibold px-6 py-2.5 rounded-xl transition">Mainkan Lagi</button>
-                </div>
-
-                <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="font-bold text-sm flex items-center space-x-2 text-indigo-600">
-                            <i class="fa-solid fa-ranking-star"></i><span>Papan Peringkat Real-Time</span>
-                        </h3>
-                        <span id="realtime-status" class="text-xs px-2.5 py-0.5 rounded-full bg-green-100 text-green-700 font-medium flex items-center space-x-1">
-                            <span class="w-2 h-2 rounded-full bg-green-500 inline-block animate-pulse"></span><span>Live Terhubung</span>
-                        </span>
-                    </div>
-                    <div id="leaderboard-list" class="space-y-2 max-h-60 overflow-y-auto pr-1 text-sm font-mono">
-                        <p class="text-gray-400 text-center py-4 text-xs font-sans">Memuat data papan peringkat...</p>
-                    </div>
+                <div id="quiz-nav-container" class="hidden pt-6 mt-6 border-t border-slate-700/60 flex justify-end">
+                    <button id="quiz-next-btn" onclick="nextQuiz()" class="hidden px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-xs shadow-lg shadow-blue-600/20 transition">Soal Selanjutnya <i class="fa-solid fa-arrow-right ml-1"></i></button>
                 </div>
             </div>
+
+            <!-- Sisi Kanan: Dedicated Leaderboard Panel Khusus (5 Kolom) -->
+            <div class="lg:col-span-5 bg-slate-800/60 border border-slate-700/60 p-6 sm:p-8 rounded-3xl backdrop-blur-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-700/60">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center"><i class="fa-solid fa-ranking-star"></i></div>
+                            <div>
+                                <h3 class="font-extrabold text-white text-sm">Papan Peringkat Global</h3>
+                                <p class="text-[11px] text-slate-400">Otomatis diperbarui saat selesai kuis</p>
+                            </div>
+                        </div>
+                        <span id="realtime-status" class="text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold flex items-center space-x-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block"></span><span>LIVE SYNC</span>
+                        </span>
+                    </div>
+
+                    <!-- Daftar Papan Skor Utama -->
+                    <div id="leaderboard-list" class="space-y-2.5 max-h-[440px] overflow-y-auto pr-1 text-sm font-mono">
+                        <p class="text-slate-500 text-center py-20 text-xs font-sans">Memuat data papan peringkat...</p>
+                    </div>
+                </div>
+
+                <div class="pt-6 mt-6 border-t border-slate-700/60 text-center">
+                    <p class="text-[11px] text-slate-400">Selesaikan 10 soal untuk mencatat nama Anda di sini secara otomatis.</p>
+                </div>
+            </div>
+
         </div>
 
     </main>
 
     <!-- Footer & Contact Us -->
-    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+    <footer class="bg-slate-800/80 border-t border-slate-700/60 py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400">
             <div>
-                <p class="font-semibold text-gray-700 dark:text-gray-200 text-sm mb-1">Math Calculator</p>
-                <p>&copy; 2026 Math Calculator. Semua hak dilindungi.</p>
+                <p class="font-bold text-slate-200 text-sm mb-1">Math Calculator</p>
+                <p>&copy; 2026 Math Calculator. Seluruh hak cipta dilindungi.</p>
             </div>
             <div class="flex flex-col sm:items-end space-y-2">
-                <p class="font-semibold text-gray-700 dark:text-gray-200 text-sm">Contact Us :</p>
+                <p class="font-bold text-slate-200 text-sm">Contact Us :</p>
                 <div class="flex flex-wrap items-center gap-4">
-                    <a href="https://instagram.com/kyynextt" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-pink-600 dark:text-pink-400 hover:underline font-medium">
+                    <a href="https://instagram.com/kyynextt" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-pink-400 hover:underline font-bold">
                         <i class="fa-brands fa-instagram text-base"></i>
                         <span>@kyynextt</span>
                     </a>
-                    <a href="https://www.linkedin.com/in/rizky-heryanto-549291364" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                    <a href="https://www.linkedin.com/in/rizky-heryanto-549291364" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1.5 text-blue-400 hover:underline font-bold">
                         <i class="fa-brands fa-linkedin text-base"></i>
                         <span>Rizky Heryanto</span>
                     </a>
@@ -325,9 +360,9 @@
         </div>
     </footer>
 
-    <!-- Script Logic -->
+    <!-- Script Logic Aplikasi -->
     <script>
-        // Konfigurasi Firebase Anda (Proyek: matematika-87992)[span_1](start_span)[span_1](end_span)
+        // Konfigurasi Firebase (Proyek: matematika-87992)
         const firebaseConfig = {
             apiKey: "AIzaSyAIAe5mQ-t7aLgjv5IrqzYVWVmoVjDXmRg",
             authDomain: "matematika-87992.firebaseapp.com",
@@ -517,18 +552,18 @@
             grid.innerHTML = filteredKeys.map(k => {
                 const m = detailedMaterials[k];
                 return `
-                    <div onclick="openMaterialDetail(${k})" class="p-5 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 flex flex-col justify-between hover:border-blue-500 cursor-pointer transition shadow-sm hover:shadow-md">
+                    <div onclick="openMaterialDetail(${k})" class="p-6 bg-slate-900/40 border border-slate-700/60 rounded-2xl flex flex-col justify-between hover:border-blue-500 cursor-pointer transition group shadow-sm">
                         <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs font-bold uppercase px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg">${m.level.toUpperCase()} - Kelas ${m.classNum}</span>
-                                <i class="fa-solid fa-arrow-right text-blue-500 text-xs"></i>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] font-extrabold uppercase px-3 py-1 bg-blue-500/10 text-blue-400 rounded-lg border border-blue-500/20">${m.level.toUpperCase()} - Kelas ${m.classNum}</span>
+                                <i class="fa-solid fa-arrow-right text-slate-500 group-hover:text-blue-400 group-hover:translate-x-1 transition text-xs"></i>
                             </div>
-                            <h3 class="font-bold text-sm mb-2 text-gray-800 dark:text-gray-100">${m.title}</h3>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed">${m.intro}</p>
+                            <h3 class="font-bold text-sm mb-2 text-white group-hover:text-blue-300 transition">${m.title}</h3>
+                            <p class="text-xs text-slate-400 line-clamp-3 leading-relaxed">${m.intro}</p>
                         </div>
-                        <div class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-800 text-xs text-blue-600 dark:text-blue-400 font-semibold flex items-center justify-between">
-                            <span>Buka Halaman Materi</span>
-                            <i class="fa-solid fa-book-open-reader"></i>
+                        <div class="mt-5 pt-3 border-t border-slate-800 text-xs text-blue-400 font-bold flex items-center justify-between">
+                            <span>Baca Materi Lengkap</span>
+                            <i class="fa-solid fa-book-open"></i>
                         </div>
                     </div>
                 `;
@@ -537,9 +572,9 @@
 
         function filterLevel(lvl) {
             document.querySelectorAll('.level-btn').forEach(btn => {
-                btn.className = "level-btn px-4 py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 transition";
+                btn.className = "level-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-slate-700/60 text-slate-300 hover:bg-slate-700 transition";
             });
-            document.getElementById('lvl-' + lvl).className = "level-btn px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white transition";
+            document.getElementById('lvl-' + lvl).className = "level-btn px-5 py-2.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-md transition";
             renderMaterialList(lvl);
         }
 
@@ -550,48 +585,44 @@
 
             const detailArea = document.getElementById('detail-content-area');
             detailArea.innerHTML = `
-                <div class="border-b border-gray-100 dark:border-gray-700 pb-4">
-                    <span class="text-xs font-bold uppercase px-3 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-600 rounded-lg">${m.level.toUpperCase()} - Kelas ${m.classNum}</span>
-                    <h2 class="text-xl font-bold mt-2 text-gray-900 dark:text-gray-100">${m.title}</h2>
-                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-2 leading-relaxed">${m.intro}</p>
+                <div class="border-b border-slate-700/60 pb-6">
+                    <span class="text-xs font-bold uppercase px-3 py-1 bg-blue-500/10 text-blue-400 rounded-lg border border-blue-500/20">${m.level.toUpperCase()} - Kelas ${m.classNum}</span>
+                    <h2 class="text-2xl font-extrabold mt-3 text-white">${m.title}</h2>
+                    <p class="text-sm text-slate-300 mt-2 leading-relaxed">${m.intro}</p>
                 </div>
 
                 <div>
-                    <h3 class="font-bold text-sm text-blue-600 mb-3 flex items-center space-x-2">
+                    <h3 class="font-bold text-sm text-blue-400 mb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-list-check"></i><span>Poin Konsep Utama</span>
                     </h3>
-                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
+                    <ul class="list-disc list-inside space-y-2 text-sm text-slate-300 bg-slate-900/50 p-5 rounded-2xl border border-slate-700/50">
                         ${m.concepts.map(c => `<li>${c}</li>`).join('')}
                     </ul>
                 </div>
 
                 <div>
-                    <h3 class="font-bold text-sm text-indigo-600 mb-2 flex items-center space-x-2">
-                        <i class="fa-solid fa-square-root-variable"></i><span>Rumus & Prinsip Matematika</span>
+                    <h3 class="font-bold text-sm text-indigo-400 mb-2.5 flex items-center space-x-2">
+                        <i class="fa-solid fa-superscript"></i><span>Rumus & Prinsip Matematika</span>
                     </h3>
-                    <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl border border-indigo-100 dark:border-indigo-800 text-sm text-indigo-700 dark:text-indigo-300 overflow-x-auto">
+                    <div class="p-5 bg-indigo-950/30 rounded-2xl border border-indigo-500/20 text-sm text-indigo-300 overflow-x-auto">
                         \\[ ${m.formulas} \\]
                     </div>
                 </div>
 
                 <div>
-                    <h3 class="font-bold text-sm text-green-600 mb-3 flex items-center space-x-2">
+                    <h3 class="font-bold text-sm text-emerald-400 mb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-pen-to-square"></i><span>Contoh Soal & Pembahasan Lengkap</span>
                     </h3>
                     <div class="space-y-4">
                         ${m.examples.map((ex, idx) => `
-                            <div class="p-5 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 space-y-3">
-                                <p class="font-semibold text-sm text-gray-800 dark:text-gray-200">Soal ${idx + 1}: ${ex.q}</p>
-                                <div class="p-3 bg-white dark:bg-gray-800 rounded-xl text-xs text-gray-600 dark:text-gray-300 whitespace-pre-line border border-gray-100 dark:border-gray-700 overflow-x-auto">
+                            <div class="p-5 bg-slate-900/50 rounded-2xl border border-slate-700/50 space-y-3">
+                                <p class="font-bold text-sm text-white">Soal ${idx + 1}: ${ex.q}</p>
+                                <div class="p-4 bg-slate-900 rounded-xl text-xs text-slate-300 whitespace-pre-line border border-slate-800 overflow-x-auto">
                                     <strong>Penyelesaian Langkah demi Langkah:</strong>\\n\\(${ex.step}\\)
                                 </div>
                             </div>
                         `).join('')}
                     </div>
-                </div>
-
-                <div class="pt-4 flex justify-between">
-                    <button onclick="backToMaterialList()" class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-medium px-5 py-2.5 rounded-xl text-sm hover:bg-gray-200 transition">Kembali ke Daftar Kelas</button>
                 </div>
             `;
             
@@ -613,26 +644,14 @@
             ['material', 'calc', 'quad', 'calculus', 'geometry', 'quiz'].forEach(t => {
                 document.getElementById('tab-content-' + t).classList.add('hidden');
                 const btn = document.getElementById('btn-' + t);
-                btn.className = "tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 whitespace-nowrap bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 transition";
+                btn.className = "tab-btn px-5 py-3 rounded-2xl font-bold text-sm flex items-center justify-center space-x-2.5 bg-slate-800 text-slate-400 hover:bg-slate-700/60 hover:text-white transition";
             });
             document.getElementById('tab-content-' + tabId).classList.remove('hidden');
             const activeBtn = document.getElementById('btn-' + tabId);
-            activeBtn.className = "tab-btn px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 whitespace-nowrap bg-blue-600 text-white shadow-md transition";
+            activeBtn.className = "tab-btn px-5 py-3 rounded-2xl font-bold text-sm flex items-center justify-center space-x-2.5 bg-blue-600 text-white shadow-lg shadow-blue-600/20 transition";
             
             if (window.MathJax) {
                 MathJax.typesetPromise();
-            }
-        }
-
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            const icon = document.getElementById('themeIcon');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                icon.className = 'fa-solid fa-moon text-lg';
-            } else {
-                html.classList.add('dark');
-                icon.className = 'fa-solid fa-sun text-lg text-yellow-400';
             }
         }
 
@@ -671,8 +690,8 @@
         }
         function renderHistory() {
             const list = document.getElementById('calc-history-list');
-            if (calcHistory.length === 0) { list.innerHTML = '<p class="text-gray-400 text-center py-10 text-xs">Belum ada riwayat</p>'; return; }
-            list.innerHTML = calcHistory.slice(0, 10).map(h => `<div class="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-xl flex justify-between font-mono text-xs"><span class="text-gray-500">${h.expr}</span><span class="font-bold text-blue-600">= ${h.res}</span></div>`).join('');
+            if (calcHistory.length === 0) { list.innerHTML = '<p class="text-slate-500 text-center py-20 text-xs">Belum ada riwayat operasi tercatat</p>'; return; }
+            list.innerHTML = calcHistory.slice(0, 10).map(h => `<div class="p-3 bg-slate-900 rounded-xl flex justify-between font-mono text-xs border border-slate-800"><span class="text-slate-400">${h.expr}</span><span class="font-bold text-blue-400">= ${h.res}</span></div>`).join('');
         }
         function clearHistory() { calcHistory = []; renderHistory(); }
 
@@ -680,13 +699,13 @@
             const a = parseFloat(document.getElementById('q-a').value), b = parseFloat(document.getElementById('q-b').value), c = parseFloat(document.getElementById('q-c').value);
             const resBox = document.getElementById('res-quad');
             resBox.classList.remove('hidden');
-            if (isNaN(a) || isNaN(b) || isNaN(c) || a === 0) { resBox.innerHTML = `<p class="text-red-500">Nilai 'a' tidak boleh nol.</p>`; return; }
+            if (isNaN(a) || isNaN(b) || isNaN(c) || a === 0) { resBox.innerHTML = `<p class="text-red-400 font-bold">Koefisien 'a' tidak boleh bernilai nol.</p>`; return; }
             const D = (b * b) - (4 * a * c);
-            let html = `<p>Diskriminan (D): <strong>${D}</strong></p>`;
-            if (D < 0) html += `<p class="text-orange-500">Akar imajiner (tidak ada akar real).</p>`;
+            let html = `<p class="text-white">Diskriminan (D): <strong class="text-blue-400">${D}</strong></p>`;
+            if (D < 0) html += `<p class="text-amber-400 font-bold">Akar berupa bilangan imajiner (tidak ada akar real).</p>`;
             else {
                 const x1 = (-b + Math.sqrt(D)) / (2 * a), x2 = (-b - Math.sqrt(D)) / (2 * a);
-                html += `<p>Akar x₁: <strong class="text-blue-600">${x1.toFixed(3)}</strong></p><p>Akar x₂: <strong class="text-blue-600">${x2.toFixed(3)}</strong></p>`;
+                html += `<p class="text-white">Akar x₁: <strong class="text-blue-400">${x1.toFixed(3)}</strong></p><p class="text-white">Akar x₂: <strong class="text-blue-400">${x2.toFixed(3)}</strong></p>`;
             }
             resBox.innerHTML = html;
         }
@@ -699,18 +718,18 @@
             const newA1 = a1 * n1, newN1 = n1 - 1;
             const newA2 = a2 * n2, newN2 = n2 - 1;
             let res = `${newA1 !== 0 ? newA1+'x^'+newN1 : ''} ${newA2 !== 0 ? (newA2 >= 0 ? '+'+newA2 : newA2)+'x^'+newN2 : ''}`.trim() || '0';
-            resBox.innerHTML = `<p class="text-lg font-bold text-indigo-600 font-mono">f'(x) = ${res}</p>`;
+            resBox.innerHTML = `<p class="text-base font-extrabold text-indigo-400 font-mono">f'(x) = ${res}</p>`;
         }
 
         const spaceConfig = {
-            kubus: [{label: 'Rusuk (s)', id: 's'}],
+            kubus: [{label: 'Panjang Rusuk (s)', id: 's'}],
             balok: [{label: 'Panjang (p)', id: 'p'}, {label: 'Lebar (l)', id: 'l'}, {label: 'Tinggi (t)', id: 't'}],
             tabung: [{label: 'Jari-jari (r)', id: 'r'}, {label: 'Tinggi (t)', id: 't'}],
             bola: [{label: 'Jari-jari (r)', id: 'r'}]
         };
         function updateSpaceForm() {
             const shape = document.getElementById('space-shape').value;
-            document.getElementById('space-inputs').innerHTML = spaceConfig[shape].map(f => `<div><label class="block text-xs text-gray-500 mb-1">${f.label}</label><input type="number" id="space-${f.id}" value="10" class="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm"></div>`).join('');
+            document.getElementById('space-inputs').innerHTML = spaceConfig[shape].map(f => `<div><label class="block text-xs font-bold text-slate-400 mb-2">${f.label}</label><input type="number" id="space-${f.id}" value="10" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white font-mono"></div>`).join('');
         }
         updateSpaceForm();
         function hitungBangunRuang() {
@@ -722,58 +741,183 @@
             else if (shape === 'bola') { const r = parseFloat(document.getElementById('space-r').value); vol = (4/3) * Math.PI * r**3; lp = 4 * Math.PI * r**2; }
             const resBox = document.getElementById('space-result');
             resBox.classList.remove('hidden');
-            resBox.innerHTML = `<p>Volume: <strong class="text-blue-600">${vol.toFixed(2)}</strong></p><p>Luas Permukaan: <strong class="text-indigo-600">${lp.toFixed(2)}</strong></p>`;
+            resBox.innerHTML = `<p class="text-white">Volume Total: <strong class="text-blue-400">${vol.toFixed(2)}</strong></p><p class="text-white">Luas Permukaan: <strong class="text-indigo-400">${lp.toFixed(2)}</strong></p>`;
         }
 
-        // Generator Soal Kuis Dinamis & Real-Time Leaderboard
-        function generateDynamicQuiz() {
+        // =====================================================================
+        // PENGACAK POSISI JAWABAN (FISHER-YATES SHUFFLE) AGAR TIDAK SELALU A
+        // =====================================================================
+        function createShuffledQuestion(qText, correctText, wrongArr, explanation) {
+            let options = [
+                { text: correctText, isCorrect: true },
+                { text: wrongArr[0], isCorrect: false },
+                { text: wrongArr[1], isCorrect: false },
+                { text: wrongArr[2], isCorrect: false }
+            ];
+            // Acak urutan array options
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+            const correctIdx = options.findIndex(o => o.isCorrect);
+            return {
+                q: qText,
+                opts: options.map(o => o.text),
+                ans: correctIdx,
+                exp: explanation
+            };
+        }
+
+        function generate10DynamicQuizzes() {
             let questions = [];
-            // Soal 1: Turunan Acak
-            let a = Math.floor(Math.random() * 5) + 2;
-            let n = Math.floor(Math.random() * 3) + 2;
-            let ansA = a * n;
-            let ansN = n - 1;
-            questions.push({
-                q: `Berapakah turunan pertama dari f(x) = ${a}x^${n}?`,
-                opts: [`${ansA}x^${ansN}`, `${a}x^${ansN}`, `${ansA}x^${n}`, `${ansA}`],
-                ans: 0,
-                exp: `Aturan pangkat: kalikan koefisien dengan pangkat (${a} × ${n} = ${ansA}), kurangi pangkat dengan 1 (${n} - 1 = ${ansN}).`
-            });
-            // Soal 2: Volume Kubus Acak
-            let s = Math.floor(Math.random() * 6) + 3;
-            let vol = s * s * s;
-            questions.push({
-                q: `Berapakah volume sebuah kubus yang memiliki panjang rusuk ${s} cm?`,
-                opts: [`${vol} cm³`, `${s * s * 6} cm³`, `${s * 4} cm³`, `${vol * 2} cm³`],
-                ans: 0,
-                exp: `Rumus volume kubus adalah V = s³. V = ${s}³ = ${vol} cm³.`
-            });
-            // Soal 3: Persamaan Kuadrat Diskriminan Acak
-            let pb = 4;
-            let pc = 4;
-            questions.push({
-                q: `Berapakah nilai Diskriminan (D) dari persamaan x² - 4x + 4 = 0?`,
-                opts: [`0`, `16`, `-16`, `8`],
-                ans: 0,
-                exp: `D = b² - 4ac = (-4)² - 4(1)(4) = 16 - 16 = 0.`
-            });
+            
+            // Soal 1: Turunan
+            let a1 = Math.floor(Math.random() * 5) + 2;
+            let n1 = Math.floor(Math.random() * 3) + 2;
+            let ansA1 = a1 * n1;
+            let ansN1 = n1 - 1;
+            questions.push(createShuffledQuestion(
+                `Berapakah turunan pertama dari f(x) = ${a1}x^${n1}?`,
+                `${ansA1}x^${ansN1}`,
+                [`${a1}x^${ansN1}`, `${ansA1}x^${n1}`, `${ansA1}`],
+                `Aturan pangkat: kalikan koefisien dengan pangkat (${a1} × ${n1} = ${ansA1}), kurangi pangkat dengan 1 (${n1} - 1 = ${ansN1}).`
+            ));
+
+            // Soal 2: Volume Kubus
+            let s2 = Math.floor(Math.random() * 6) + 3;
+            let vol2 = s2 * s2 * s2;
+            questions.push(createShuffledQuestion(
+                `Berapakah volume sebuah kubus yang memiliki panjang rusuk ${s2} cm?`,
+                `${vol2} cm³`,
+                [`${s2 * s2 * 6} cm³`, `${s2 * 4} cm³`, `${vol2 * 2} cm³`],
+                `Rumus volume kubus adalah V = s³. V = ${s2}³ = ${vol2} cm³.`
+            ));
+
+            // Soal 3: Diskriminan Kuadrat
+            questions.push(createShuffledQuestion(
+                `Berapakah nilai Diskriminan (D) dari persamaan kuadrat x² - 4x + 4 = 0?`,
+                `0`,
+                [`16`, `-16`, `8`],
+                `D = b² - 4ac = (-4)² - 4(1)(4) = 16 - 16 = 0.`
+            ));
+
+            // Soal 4: Luas Persegi Panjang
+            let p4 = Math.floor(Math.random() * 5) + 6;
+            let l4 = Math.floor(Math.random() * 4) + 3;
+            let luas4 = p4 * l4;
+            questions.push(createShuffledQuestion(
+                `Berapakah luas persegi panjang dengan panjang ${p4} cm dan lebar ${l4} cm?`,
+                `${luas4} cm²`,
+                [`${2 * (p4 + l4)} cm²`, `${luas4 + 4} cm²`, `${p4 * 2} cm²`],
+                `Luas persegi panjang = p × l = ${p4} × ${l4} = ${luas4} cm².`
+            ));
+
+            // Soal 5: Keliling Persegi
+            let s5 = Math.floor(Math.random() * 8) + 5;
+            let kel5 = 4 * s5;
+            questions.push(createShuffledQuestion(
+                `Sebuah ubin berbentuk persegi memiliki sisi ${s5} cm. Berapa keliling ubin tersebut?`,
+                `${kel5} cm`,
+                [`${s5 * s5} cm`, `${kel5 + 2} cm`, `${s5 * 2} cm`],
+                `Keliling persegi = 4 × s = 4 × ${s5} = ${kel5} cm.`
+            ));
+
+            // Soal 6: Barisan Aritmatika
+            let a6 = Math.floor(Math.random() * 3) + 2;
+            let b6 = Math.floor(Math.random() * 4) + 3;
+            let u5 = a6 + (5 - 1) * b6;
+            questions.push(createShuffledQuestion(
+                `Diketahui barisan aritmatika dengan suku awal a = ${a6} dan beda b = ${b6}. Berapa suku ke-5 (U₅)?`,
+                `${u5}`,
+                [`${u5 + b6}`, `${a6 * b6}`, `${u5 - 2}`],
+                `Uₙ = a + (n - 1)b. U₅ = ${a6} + (4)(${b6}) = ${a6} + ${4 * b6} = ${u5}.`
+            ));
+
+            // Soal 7: Perkalian Pecahan Dasar
+            questions.push(createShuffledQuestion(
+                `Berapakah hasil dari pecahan 3/4 dikali dengan 8?`,
+                `6`,
+                [`4`, `8`, `12`],
+                `(3 / 4) × 8 = 3 × (8 / 4) = 3 × 2 = 6.`
+            ));
+
+            // Soal 8: Rata-rata (Mean) Sederhana
+            questions.push(createShuffledQuestion(
+                `Berapakah nilai rata-rata (mean) dari data angka: 70, 80, dan 90?`,
+                `80`,
+                [`75`, `85`, `90`],
+                `Rata-rata = (70 + 80 + 90) / 3 = 240 / 3 = 80.`
+            ));
+
+            // Soal 9: Akar Pangkat Dua
+            let val9 = Math.floor(Math.random() * 5) + 6;
+            let kuadrat9 = val9 * val9;
+            questions.push(createShuffledQuestion(
+                `Berapakah hasil akar kuadrat dari ${kuadrat9} (√${kuadrat9})?`,
+                `${val9}`,
+                [`${val9 + 1}`, `${val9 - 1}`, `${val9 * 2}`],
+                `Karena ${val9} × ${val9} = ${kuadrat9}, maka nilai akarnya adalah ${val9}.`
+            ));
+
+            // Soal 10: Integral Sederhana
+            questions.push(createShuffledQuestion(
+                `Tentukan hasil integral tak tentu dari ∫ 2 dx.`,
+                `2x + C`,
+                [`x² + C`, `2 + C`, `x + C`],
+                `Integral konstanta k terhadap x adalah kx + C. Jadi ∫ 2 dx = 2x + C.`
+            ));
+
             return questions;
         }
 
         let quizData = [];
         let qIdx = 0, score = 0, answered = false, playerName = "Anonim";
+        let localScores = JSON.parse(localStorage.getItem('math_calc_leaderboard') || '[]');
+        let firebaseScores = [];
+
+        function renderCombinedLeaderboard() {
+            const list = document.getElementById('leaderboard-list');
+            // Gabungkan data Firebase dengan cadangan lokal agar selalu langsung ter-update
+            let combined = [...firebaseScores];
+            localScores.forEach(loc => {
+                const exists = combined.some(fb => fb.name === loc.name && fb.score === loc.score && Math.abs((fb.time || 0) - (loc.time || 0)) < 15000);
+                if (!exists) combined.push(loc);
+            });
+
+            if (combined.length === 0) {
+                list.innerHTML = '<p class="text-slate-500 text-center py-20 text-xs font-sans">Belum ada skor tercatat. Jadilah yang pertama di papan peringkat!</p>';
+                return;
+            }
+
+            combined.sort((a, b) => b.score - a.score);
+            list.innerHTML = combined.slice(0, 20).map((item, index) => {
+                let rankIcon = index === 0 ? '<i class="fa-solid fa-crown text-amber-400"></i>' : index === 1 ? '<i class="fa-solid fa-medal text-slate-300"></i>' : index === 2 ? '<i class="fa-solid fa-award text-amber-600"></i>' : `#${index + 1}`;
+                let cardBg = index === 0 ? 'bg-amber-500/10 border-amber-500/30 text-white' : index === 1 ? 'bg-slate-700/40 border-slate-600/40 text-slate-200' : index === 2 ? 'bg-amber-900/20 border-amber-800/30 text-slate-200' : 'bg-slate-900/60 border-slate-800 text-slate-300';
+                return `
+                    <div class="p-3.5 rounded-2xl flex justify-between items-center text-xs border ${cardBg} shadow-sm transition-all">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-6 text-center font-extrabold">${rankIcon}</span>
+                            <span class="font-bold truncate max-w-[140px] sm:max-w-[180px]">${item.name}</span>
+                        </div>
+                        <span class="font-extrabold text-blue-400">${item.score} Poin</span>
+                    </div>
+                `;
+            }).join('');
+        }
         
         function startQuiz() {
             const nameInput = document.getElementById('player-name').value.trim();
-            if (nameInput) playerName = nameInput;
-            else playerName = "Anonim";
+            playerName = nameInput ? nameInput : "Pemain Anonim";
             
-            quizData = generateDynamicQuiz(); // Buat soal baru setiap mulai kuis
+            quizData = generate10DynamicQuizzes();
             qIdx = 0; score = 0; answered = false;
             
+            document.getElementById('quiz-player-tag').innerText = `Pemain: ${playerName}`;
             document.getElementById('quiz-start-screen').classList.add('hidden');
             document.getElementById('quiz-result-screen').classList.add('hidden');
             document.getElementById('quiz-question-screen').classList.remove('hidden');
+            document.getElementById('quiz-badge-container').classList.remove('hidden');
+            document.getElementById('quiz-nav-container').classList.remove('hidden');
             loadQ();
         }
 
@@ -785,7 +929,7 @@
             document.getElementById('quiz-q-text').innerText = q.q;
             document.getElementById('quiz-exp').classList.add('hidden');
             document.getElementById('quiz-next-btn').classList.add('hidden');
-            document.getElementById('quiz-opts').innerHTML = q.opts.map((opt, i) => `<button onclick="ansQ(${i})" id="q-opt-${i}" class="w-full text-left p-3 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm font-medium">${String.fromCharCode(65 + i)}. ${opt}</button>`).join('');
+            document.getElementById('quiz-opts').innerHTML = q.opts.map((opt, i) => `<button onclick="ansQ(${i})" id="q-opt-${i}" class="w-full text-left p-4 rounded-2xl border border-slate-700 hover:bg-slate-700/50 text-sm font-bold text-white transition">${String.fromCharCode(65 + i)}. ${opt}</button>`).join('');
         }
 
         function ansQ(selected) {
@@ -794,16 +938,15 @@
             const q = quizData[qIdx], expDiv = document.getElementById('quiz-exp');
             expDiv.classList.remove('hidden');
             if (selected === q.ans) {
-                score += Math.round(100 / quizData.length);
-                if (qIdx === quizData.length - 1 && score < 100) score = 100; // Pastikan genap 100
-                document.getElementById(`q-opt-${selected}`).classList.add('bg-green-100', 'border-green-500', 'text-green-700');
-                expDiv.className = "p-4 rounded-xl text-sm border bg-green-50 border-green-200 text-green-800";
+                score += 10;
+                document.getElementById(`q-opt-${selected}`).className = "w-full text-left p-4 rounded-2xl border border-emerald-500 bg-emerald-500/10 text-emerald-300 text-sm font-bold transition";
+                expDiv.className = "p-4 rounded-2xl text-xs border bg-emerald-950/30 border-emerald-500/20 text-emerald-300";
                 expDiv.innerHTML = `<strong>Benar!</strong> ${q.exp}`;
             } else {
-                document.getElementById(`q-opt-${selected}`).classList.add('bg-red-100', 'border-red-500', 'text-red-700');
-                document.getElementById(`q-opt-${q.ans}`).classList.add('bg-green-100', 'border-green-500', 'text-green-700');
-                expDiv.className = "p-4 rounded-xl text-sm border bg-red-50 border-red-200 text-red-800";
-                expDiv.innerHTML = `<strong>Kurang tepat.</strong> Jawaban benar: ${q.opts[q.ans]}<br>${q.exp}`;
+                document.getElementById(`q-opt-${selected}`).className = "w-full text-left p-4 rounded-2xl border border-red-500 bg-red-500/10 text-red-300 text-sm font-bold transition";
+                document.getElementById(`q-opt-${q.ans}`).className = "w-full text-left p-4 rounded-2xl border border-emerald-500 bg-emerald-500/10 text-emerald-300 text-sm font-bold transition";
+                expDiv.className = "p-4 rounded-2xl text-xs border bg-red-950/30 border-red-500/20 text-red-300";
+                expDiv.innerHTML = `<strong>Kurang tepat.</strong> Jawaban benar: <strong>${String.fromCharCode(65 + q.ans)}. ${q.opts[q.ans]}</strong><br>${q.exp}`;
             }
             document.getElementById('quiz-score-badge').innerText = `Skor: ${score}`;
             document.getElementById('quiz-next-btn').classList.remove('hidden');
@@ -814,39 +957,45 @@
             if (qIdx < quizData.length) loadQ();
             else {
                 document.getElementById('quiz-question-screen').classList.add('hidden');
+                document.getElementById('quiz-nav-container').classList.add('hidden');
+                document.getElementById('quiz-badge-container').classList.add('hidden');
                 document.getElementById('quiz-result-screen').classList.remove('hidden');
-                document.getElementById('quiz-final-score').innerText = `${playerName}, Skor Total Anda: ${score}`;
+                document.getElementById('quiz-final-score').innerText = `${playerName}, Total Skor Anda: ${score} / 100`;
                 
-                // Simpan ke Firebase Realtime Database secara live
-                db.ref('leaderboard').push({
+                const newEntry = {
                     name: playerName,
                     score: score,
-                    time: firebase.database.ServerValue.TIMESTAMP
-                }).catch(err => console.error("Firebase write error:", err));
+                    time: Date.now()
+                };
+
+                // 1. Simpan ke lokal & perbarui tampilan papan peringkat secara instan
+                localScores.push(newEntry);
+                localStorage.setItem('math_calc_leaderboard', JSON.stringify(localScores));
+                renderCombinedLeaderboard();
+
+                // 2. Kirim ke Firebase Realtime Database
+                db.ref('leaderboard').push(newEntry)
+                    .then(() => {
+                        document.getElementById('save-feedback').innerText = "Skor tersimpan ke server global secara real-time!";
+                    })
+                    .catch(err => {
+                        console.error("Firebase write error:", err);
+                        document.getElementById('save-feedback').innerText = "Skor ditampilkan di papan peringkat (Pastikan Rules Firebase publik agar sinkron antar perangkat).";
+                    });
             }
         }
 
         // Listener Real-Time Firebase Leaderboard
-        db.ref('leaderboard').orderByChild('score').limitToLast(15).on('value', (snapshot) => {
-            const list = document.getElementById('leaderboard-list');
+        renderCombinedLeaderboard();
+        db.ref('leaderboard').orderByChild('score').limitToLast(20).on('value', (snapshot) => {
             const data = snapshot.val();
-            if (!data) {
-                list.innerHTML = '<p class="text-gray-400 text-center py-4 text-xs font-sans">Belum ada skor yang tercatat. Jadilah yang pertama!</p>';
-                return;
-            }
-            let arr = Object.values(data).sort((a, b) => b.score - a.score);
-            list.innerHTML = arr.map((item, index) => {
-                let badgeColor = index === 0 ? 'text-yellow-500 font-bold' : index === 1 ? 'text-gray-400 font-bold' : index === 2 ? 'text-amber-600 font-bold' : 'text-gray-600 dark:text-gray-300';
-                return `
-                    <div class="p-3 bg-gray-50 dark:bg-gray-900 rounded-xl flex justify-between items-center text-xs border border-gray-100 dark:border-gray-800">
-                        <span class="${badgeColor}">#${index + 1} ${item.name}</span>
-                        <span class="font-bold text-blue-600 dark:text-blue-400">${item.score} Poin</span>
-                    </div>
-                `;
-            }).join('');
+            firebaseScores = data ? Object.values(data) : [];
+            renderCombinedLeaderboard();
+            document.getElementById('realtime-status').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block"></span><span>LIVE SYNC</span>`;
+            document.getElementById('realtime-status').className = "text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold flex items-center space-x-1.5";
         }, (error) => {
-            document.getElementById('realtime-status').innerHTML = `<span class="text-red-600">Mode Offline (Cek Rules Firebase)</span>`;
-            document.getElementById('realtime-status').className = "text-xs px-2.5 py-0.5 rounded-full bg-red-100 text-red-700 font-medium";
+            document.getElementById('realtime-status').innerHTML = `<span>LOKAL AKTIF (Cek Rules Firebase)</span>`;
+            document.getElementById('realtime-status').className = "text-[10px] px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold";
         });
     </script>
 </body>
