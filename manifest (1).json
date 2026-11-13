@@ -1,0 +1,24 @@
+{
+  "id": "/",
+  "name": "Math Calculator - Pusat Materi &amp; Kalkulator",
+  "short_name": "MathCalc",
+  "start_url": "./index.html",
+  "dir": "ltr",
+  "lang": "id",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0F172A",
+  "theme_color": "#2563eb",
+  "description": "Platform edukasi matematika lengkap, kalkulator ilmiah, dan papan peringkat kuis global.",
+  "icons": [
+    {
+      "src": "./icon-512.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "books"
+  ]
+}
