@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Calculator - Pusat Materi Lengkap SD-SMA & Kalkulator Pintar</title>
+    
+    <!-- PWA Manifest & Theme -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -24,8 +29,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
     <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
-    <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2563eb">
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
 
     <!-- Top Navigation Bar -->
@@ -372,7 +375,7 @@
 
     <!-- Script Logic Aplikasi -->
     <script>
-        // Konfigurasi Firebase (Proyek: matematika-87992)[span_0](start_span)[span_0](end_span)
+        // Konfigurasi Firebase (Proyek: matematika-87992)
         const firebaseConfig = {
             apiKey: "AIzaSyAIAe5mQ-t7aLgjv5IrqzYVWVmoVjDXmRg",
             authDomain: "matematika-87992.firebaseapp.com",
@@ -404,7 +407,7 @@
                 ],
                 formulas: 'a + b = c \\quad \\text{(Penjumlahan)} \\quad | \\quad a - b = c \\quad \\text{(Pengurangan)}',
                 examples: [
-                    { q: 'Ani memiliki 5 kelereng merah, lalu diberi Budi 3 kelereng biru. Berapa jumlah seluruh kelereng Ani?', step: 'Diketahui kelereng merah = 5, kelereng biru = 3. Digabungkan berarti dijumlahkan.\\n5 + 3 = 8 kelereng.' }
+                    { q: 'Ani memiliki 5 kelereng merah, lalu diberi Budi 3 kelereng biru. Berapa jumlah seluruh kelereng Ani?', step: 'Diketahui kelereng merah = 5, kelereng biru = 3. Digabungkan berarti dijumlahkan.\n5 + 3 = 8 kelereng.' }
                 ]
             },
             2: {
@@ -417,7 +420,7 @@
                 ],
                 formulas: 'a \\times b = \\underbrace{b + b + \\dots + b}_{\\text{sebanyak } a} \\quad | \\quad 1 \\text{ Meter} = 100 \\text{ cm}',
                 examples: [
-                    { q: 'Terdapat 4 keranjang buah. Setiap keranjang berisi 6 buah mangga. Berapa total mangga seluruhnya?', step: '4 keranjang dikali 6 buah per keranjang.\\n4 \\times 6 = 24 \\text{ mangga}.' }
+                    { q: 'Terdapat 4 keranjang buah. Setiap keranjang berisi 6 buah mangga. Berapa total mangga seluruhnya?', step: '4 keranjang dikali 6 buah per keranjang.\n4 \\times 6 = 24 \\text{ mangga}.' }
                 ]
             },
             3: {
@@ -430,7 +433,7 @@
                 ],
                 formulas: '\\text{Keliling Persegi} = 4 \\times s \\quad | \\quad \\text{Keliling Persegi Panjang} = 2 \\times (p + l)',
                 examples: [
-                    { q: 'Sebuah taman berbentuk persegi memiliki panjang sisi 12 meter. Berapa keliling taman tersebut?', step: '\\text{Keliling} = 4 \\times s\\n\\text{Keliling} = 4 \\times 12 = 48 \\text{ meter}.' }
+                    { q: 'Sebuah taman berbentuk persegi memiliki panjang sisi 12 meter. Berapa keliling taman tersebut?', step: '\\text{Keliling} = 4 \\times s\n\\text{Keliling} = 4 \\times 12 = 48 \\text{ meter}.' }
                 ]
             },
             4: {
@@ -443,7 +446,7 @@
                 ],
                 formulas: '\\text{KPK} = \\text{Kelipatan Sekutu Terkecil} \\quad | \\quad \\text{FPB} = \\text{Faktor Sekutu Terbesar}',
                 examples: [
-                    { q: 'Tentukan FPB dan KPK dari angka 12 dan 18.', step: '\\text{Faktor 12: } 1, 2, 3, 4, 6, 12.\\n\\text{Faktor 18: } 1, 2, 3, 6, 9, 18.\\n\\text{FPB} = 6, \\quad \\text{KPK} = 36.' }
+                    { q: 'Tentukan FPB dan KPK dari angka 12 dan 18.', step: '\\text{Faktor 12: } 1, 2, 3, 4, 6, 12.\n\\text{Faktor 18: } 1, 2, 3, 6, 9, 18.\n\\text{FPB} = 6, \\quad \\text{KPK} = 36.' }
                 ]
             },
             5: {
@@ -456,7 +459,7 @@
                 ],
                 formulas: 'v = \\frac{s}{t} \\quad (\\text{Kecepatan} = \\frac{\\text{Jarak}}{\\text{Waktu}}) \\quad | \\quad Q = \\frac{V}{t}',
                 examples: [
-                    { q: 'Sebuah mobil menempuh jarak 150 km dalam waktu 3 jam. Berapa kecepatan rata-rata mobil tersebut?', step: 'v = \\frac{s}{t}\\nv = \\frac{150 \\text{ km}}{3 \\text{ jam}} = 50 \\text{ km/jam}.' }
+                    { q: 'Sebuah mobil menempuh jarak 150 km dalam waktu 3 jam. Berapa kecepatan rata-rata mobil tersebut?', step: 'v = \\frac{s}{t}\nv = \\frac{150 \\text{ km}}{3 \\text{ jam}} = 50 \\text{ km/jam}.' }
                 ]
             },
             6: {
@@ -468,7 +471,7 @@
                 ],
                 formulas: '\\text{Mean} = \\frac{\\sum x_i}{n} = \\frac{\\text{Jumlah Seluruh Data}}{\\text{Banyaknya Data}}',
                 examples: [
-                    { q: 'Data nilai ulangan: 70, 80, 80, 90, 100. Berapa nilai Rata-rata (Mean)?', step: '\\text{Jumlah nilai} = 70 + 80 + 80 + 90 + 100 = 420.\\n\\text{Mean} = \\frac{420}{5} = 84.' }
+                    { q: 'Data nilai ulangan: 70, 80, 80, 90, 100. Berapa nilai Rata-rata (Mean)?', step: '\\text{Jumlah nilai} = 70 + 80 + 80 + 90 + 100 = 420.\n\\text{Mean} = \\frac{420}{5} = 84.' }
                 ]
             },
             7: {
@@ -481,7 +484,7 @@
                 ],
                 formulas: 'a(b + c) = ab + ac \\quad | \\quad A \\cup B \\text{ (Gabungan Himpunan)}',
                 examples: [
-                    { q: 'Sederhanakan bentuk aljabar berikut: 3(2x - 4) + 5x.', step: '= 3(2x) - 3(4) + 5x\\n= 6x - 12 + 5x = 11x - 12.' }
+                    { q: 'Sederhanakan bentuk aljabar berikut: 3(2x - 4) + 5x.', step: '= 3(2x) - 3(4) + 5x\n= 6x - 12 + 5x = 11x - 12.' }
                 ]
             },
             8: {
@@ -494,7 +497,7 @@
                 ],
                 formulas: 'c^2 = a^2 + b^2 \\quad | \\quad m = \\frac{y_2 - y_1}{x_2 - x_1}',
                 examples: [
-                    { q: 'Diketahui sisi alas segitiga siku-siku 6 cm dan tinggi 8 cm. Berapa panjang sisi miring (c)?', step: 'c^2 = 6^2 + 8^2 = 36 + 64 = 100\\nc = \\sqrt{100} = 10 \\text{ cm}.' }
+                    { q: 'Diketahui sisi alas segitiga siku-siku 6 cm dan tinggi 8 cm. Berapa panjang sisi miring (c)?', step: 'c^2 = 6^2 + 8^2 = 36 + 64 = 100\nc = \\sqrt{100} = 10 \\text{ cm}.' }
                 ]
             },
             9: {
@@ -507,7 +510,7 @@
                 ],
                 formulas: 'a^m \\times a^n = a^{m+n} \\quad | \\quad x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}',
                 examples: [
-                    { q: 'Tentukan akar-akar persamaan kuadrat dari x² - 5x + 6 = 0.', step: '\\text{Faktorisasi: } (x - 2)(x - 3) = 0\\nx = 2 \\quad \\text{atau} \\quad x = 3.' }
+                    { q: 'Tentukan akar-akar persamaan kuadrat dari x² - 5x + 6 = 0.', step: '\\text{Faktorisasi: } (x - 2)(x - 3) = 0\nx = 2 \\quad \\text{atau} \\quad x = 3.' }
                 ]
             },
             10: {
@@ -533,7 +536,7 @@
                 ],
                 formulas: 'U_n = a + (n-1)b \\quad | \\quad \\frac{d}{dx}[ax^n] = a \\cdot n \\cdot x^{n-1}',
                 examples: [
-                    { q: 'Tentukan suku ke-10 dari barisan aritmatika: 3, 7, 11, 15, ...', step: 'a = 3, b = 4\\nU_{10} = 3 + (10 - 1)(4) = 3 + 36 = 39.' }
+                    { q: 'Tentukan suku ke-10 dari barisan aritmatika: 3, 7, 11, 15, ...', step: 'a = 3, b = 4\nU_{10} = 3 + (10 - 1)(4) = 3 + 36 = 39.' }
                 ]
             },
             12: {
@@ -546,7 +549,7 @@
                 ],
                 formulas: '\\int ax^n \\, dx = \\frac{a}{n+1}x^{n+1} + C',
                 examples: [
-                    { q: 'Tentukan hasil integral tak tentu dari \\int 6x^2 \\, dx.', step: '= \\frac{6}{2+1}x^{2+1} + C\\n= \\frac{6}{3}x^3 + C = 2x^3 + C.' }
+                    { q: 'Tentukan hasil integral tak tentu dari \\int 6x^2 \\, dx.', step: '= \\frac{6}{2+1}x^{2+1} + C\n= \\frac{6}{3}x^3 + C = 2x^3 + C.' }
                 ]
             }
         };
@@ -628,7 +631,7 @@
                             <div class="p-5 bg-slate-900/50 rounded-2xl border border-slate-700/50 space-y-3">
                                 <p class="font-bold text-sm text-white">Soal ${idx + 1}: ${ex.q}</p>
                                 <div class="p-4 bg-slate-900 rounded-xl text-xs text-slate-300 whitespace-pre-line border border-slate-800 overflow-x-auto">
-                                    <strong>Penyelesaian Langkah demi Langkah:</strong>\\n\\(${ex.step}\\)
+                                    <strong>Penyelesaian Langkah demi Langkah:</strong>\n\\(${ex.step}\\)
                                 </div>
                             </div>
                         `).join('')}
