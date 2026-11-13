@@ -1,0 +1,17 @@
+{
+  "name": "Math Calculator - Pusat Materi & Kalkulator",
+  "short_name": "MathCalc",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "description": "Platform edukasi matematika lengkap, kalkulator ilmiah, dan papan peringkat kuis global.",
+  "icons": [
+    {
+      "src": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/square-root-variable.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
